@@ -1,120 +1,13 @@
-# M5Stack Firmware
+// Based on a sketch will send out a Nikon D50 trigger signal (probably works with most Nikons) // See the full tutorial at https://learn.adafruit.com/ir-sensor/making-an-intervalometer // Adapted for M5-stack cardputer by A.D. Johnson in Sept 2024 // // Can now be used as a manual remote control (single shot) or as an Intervalometer, with settings entered on the Cardputer's keyboard! // Countown and Photo Counter are displayed on the Cardputer's small screen! // The idea is then that multiple pictures are taken and can be made into a time-lapse video! // Code has been included to trigger Canon, Nikon, Sony, Olympus, Pentax and Minolta cameras
 
-## Description
-You can share your firmware and other M5 fans can use it by M5Burner.But if you want to share your firmware here, you should follow some rules below.
+A forum post I read noted this problem, and a response to the Original Poster suggested a solution was to use an Arduino device and circuit to send an IR pulse to the camera, mimicking the camera’s IR remote, to take photos. The Arduino device mentioned was an ESP32 microcontroller - and the circuit was shown constructed on a bread board. This seemed rather unwieldy, to say the least. At this point I’d realised that a recent purchase – about which I’ve been meaning the write a blog entry – not only had an ESP32 microcontroller, it also had a built-in IR LED – it was the excellent and versatile M5Cardputer!
 
-## Demo
-* [UIFlow Firmware](https://github.com/EeeeBin/UIFlow-Firmware) (Multi Version Demo)
-* [Test Firmware](https://github.com/curdeveryday/test-firmware) (Single Version Demo)
+I thought that I should be able to directly use the Arduino Sketch from the circuit example, with only one modification. All I needed to do was change the Pin number of the IR LED. That is, in the M5Cardputer, the IR LED is connected to pin 44 of the ESP32.
 
-## Quickstart
-### __1.Folder Structure__
-Here some requirements to your firmware directory.For example:
-```
-│  README.md
-│  m5burner.json (Required)
-│
-└─ firmware (Required)
-        bootloader_0x1000.bin
-        MicroPython_0x10000.bin
-        partitions_mpy_0x8000.bin
-        phy_init_data_0xf000.bin
-        spiffs_image_0x170000.img
-        ......
-```
-> Your firmware root directory must have file *m5burner.json* and folder *firmware*.
+I loaded the code into the Arduino IDE and compiled it and downloaded it to the Cardputer… it worked straight away!
 
-### __2.File *m5burner.json* Format__
-Some infomation must in your *m5burner.json*.For example:
-``` javascript
-{
-    // Firmware name
-    "name": "UIFlow",
+The Cardputer is well-suited to the role of IR Camera remote control – being battery powered and pocketable! All that needed to be added was some code to time the repetition of pulses and then offer some options to the user.
 
-    // Description
-    "description": "maybe nooooooooo bug",
+Of course, one could view IR remote control as “old hat” now – as newer cameras can be controlled by Apps and either a BlueTooth or WiFi connection, providing easier functionality and, for example, video/image previews on the remote device (i.e. Smart Phone or Tablet). The Carpduter is also equipped with WiFi and Bluetooth, so could, in theory, be used to control a camera with these methods. One such project has been built for a Canon Camera, using an Arduino Board.
 
-    // Keywords
-    "keywords": "ESP32, Micropython",
-
-    // Author
-    "author": "EeeeBin",
-
-    // The github repository of the firmware (Required)
-    "repository": "https://github.com/EeeeBin/UIFlow-Firmware",
-
-    // If there are multiple categories of firmware, this field will be a array.
-    // Otherwise, it will be a key-value structure.
-    // (Single version demo: https://github.com/curdeveryday/test-firmware)
-    "firmware_category": [
-        // Category infomation
-        {
-            // Category name
-            "Stack-EN": {
-                // Firmware path
-                "path": "firmware_en",
-
-                // Applicable Devices
-                "device": ["M5Stack Core"],
-
-                // Default baudrate
-                "default_baud": 921600
-            }
-        },
-        
-        // Same of above ...
-        {
-            "Stack-CN": {
-                "path": "firmware_cn",
-                "device": [
-                    "M5Stack Core"
-                ],
-                "default_baud": 921600
-            }
-        },
-        {
-            "Stick": {
-                "path": "firmware_Stick",
-                "device": [
-                    "M5Stack Stick"
-                ],
-                "default_baud": 921600
-            }
-        },
-        {
-            "StickC": {
-                "path": "firmware_StickC",
-                "device": [
-                    "M5Stack StickC"
-                ],
-                "default_baud": 750000
-            }
-        }
-    ],
-
-    // Firmware version
-    "version": "1.2.3",
-
-    // Firmware platform
-    "framework": "Micropython"
-}
-```
-
-### __3.Folder *firmware*__
-The name of files in *firmware* must follow the rules.
-
-#### __Please follow the rule `filename` = `name` + "_" + `flash address`.__
-
-For example, if you have a file _**a.bin**_ and it flash address is _**0x1000**_.It should be named _**a_0x1000.bin**_
-
-### __4.Pull Request__
-After meeting the above rules, you should fork our [repository](https://github.com/m5stack/M5Stack-Firmware) and add your firmware repository in `firmware-repo.list`.Now, you submit a pull request in [M5Stack Firmware](https://github.com/EeeeBin/UIFlow-Firmware/pulls).We will review your firmware and add it in M5Burner.This operation is only required when the firmware is first submitted. If the firmware is updated, M5Burner will automatically obtain the new firmware address.
-
-## Download M5Burner
-- [Windows](http://m5stack.oss-cn-shenzhen.aliyuncs.com/resource/software/M5Burner.zip)
-- [MacOS](http://m5stack.oss-cn-shenzhen.aliyuncs.com/resource/software/M5Burner_MacOS.zip)
-- [Linux](http://m5stack.oss-cn-shenzhen.aliyuncs.com/resource/software/M5Burner_Linux.zip)
-
-## Contribution
-Last but certainly not least, a big *__Thank You__*! To the following folks that helped to make M5Stack even better.
-- [EeeeBin](https://github.com/EeeeBin): Add firmware UIFlow [PR #1](https://github.com/m5stack/M5Stack-Firmware/pull/1)
+Support for Different Makes of Camera - Code was copied from MD_multiCameraIrControl to trigger the popular makes of camera....
