@@ -1,0 +1,20 @@
+{
+    "name": "Cardputer IR Intervalometer for cameras",
+    "description": "Turns the Cardputer into a timer IR release for Canon, Nikon and other Cameras",
+    "keywords": "ESP32, Infrared, Remote, Timer",
+    "author": "Andrew Johnson",
+    "repository": "https://github.com/AndrewDJohnson/M5CardPuterIntervalometer",
+    "firmware_category": [
+        {
+            "Cardputer_en": {
+                "path": ".",
+                "device": [
+                    "M5Cardputer"
+                ],
+                "default_baud": 921600
+            }
+        }
+    ],
+    "version": "1.0.0",
+    "framework": "Arduino"
+}
